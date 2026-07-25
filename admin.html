@@ -621,15 +621,9 @@
         const ADMIN_PASS = "vyap@123123";
 
         function checkAdminSession() {
-            const authState = sessionStorage.getItem('vyapar_admin_authenticated');
-            if (authState === 'true') {
-                document.getElementById('admin-login-overlay').style.display = 'none';
-                document.getElementById('admin-main-wrapper').style.display = 'block';
-                loadAdminOrders();
-            } else {
-                document.getElementById('admin-login-overlay').style.display = 'flex';
-                document.getElementById('admin-main-wrapper').style.display = 'none';
-            }
+            // Require login credentials every time Admin Portal is opened
+            document.getElementById('admin-login-overlay').style.display = 'flex';
+            document.getElementById('admin-main-wrapper').style.display = 'none';
         }
 
         function handleAdminLogin(event) {
@@ -639,17 +633,20 @@
             const errBox = document.getElementById('login-error-box');
 
             if (userVal === ADMIN_USER && passVal === ADMIN_PASS) {
-                sessionStorage.setItem('vyapar_admin_authenticated', 'true');
                 errBox.style.display = 'none';
-                checkAdminSession();
+                document.getElementById('admin-login-overlay').style.display = 'none';
+                document.getElementById('admin-main-wrapper').style.display = 'block';
+                loadAdminOrders();
             } else {
                 errBox.style.display = 'block';
             }
         }
 
         function handleAdminLogout() {
-            sessionStorage.removeItem('vyapar_admin_authenticated');
-            checkAdminSession();
+            document.getElementById('admin-user-input').value = '';
+            document.getElementById('admin-pass-input').value = '';
+            document.getElementById('admin-login-overlay').style.display = 'flex';
+            document.getElementById('admin-main-wrapper').style.display = 'none';
         }
 
         let allOrdersList = [];
