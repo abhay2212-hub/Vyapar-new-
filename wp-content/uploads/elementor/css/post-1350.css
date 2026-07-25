@@ -739,13 +739,13 @@ a.flex-active {
 .elementor-1350 .elementor-element.elementor-element-a659fde .razzi-heading-title {
     padding-right: 200px;
     --rz-animation-duration: 4s;
-    background: linear-gradient(92.37deg, #FF8200 0%, #735C22 100%);
+    background: none !important;
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: #000080 !important;
     background-clip: text;
     text-fill-color: transparent;
     display: inline-block;
-    color: #FF8200;
+    color: #000080 !important;
     font-size: 36px;
 }
 
