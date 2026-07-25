@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - Vyapar Vault</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-config.js"></script>
+    <style id="lenskart-cart-styles">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f7f7f9;
+            color: #000042;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Header */
+        .cart-navbar {
+            background: #ffffff;
+            height: 70px;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .cart-navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .cart-navbar-logo img {
+            height: 45px;
+            object-fit: contain;
+        }
+
+        .cart-navbar-logo span {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000042;
+        }
+
+        .cart-navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            font-size: 14px;
+            color: #000042;
+            font-weight: 600;
+        }
+
+        .cart-badge-safe {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #00a065;
+            font-weight: 600;
+        }
+
+        .cart-contact-phone {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .admin-link-btn {
+            background: #000042;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Main Cart Container */
+        .cart-page-wrapper {
+            max-width: 1140px;
+            width: 100%;
+            margin: 35px auto 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 35px;
+        }
+
+        @media (max-width: 900px) {
+            .cart-page-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .cart-section-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #000042;
+            margin-bottom: 20px;
+        }
+
+        /* Left Column Items */
+        .cart-item-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 24px;
+            border: 1px solid #eaebf0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            margin-bottom: 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .cart-item-card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+        }
+
+        .cart-item-grid {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        @media (max-width: 550px) {
+            .cart-item-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .cart-item-img-box {
+            width: 140px;
+            height: 140px;
+            border-radius: 10px;
+            background: #fbfbfd;
+            border: 1px solid #f0f0f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .cart-item-img-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .cart-item-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-item-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .cart-item-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000042;
+            line-height: 1.4;
+            max-width: 320px;
+        }
+
+        .cart-item-price-top {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000042;
+            white-space: nowrap;
+        }
+
+        .dotted-divider {
+            border-top: 1px dotted #d0d2dc;
+            margin: 14px 0;
+        }
+
+        .cart-item-final-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .cart-item-final-label {
+            color: #555577;
+            font-weight: 500;
+        }
+
+        .cart-item-final-val {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000042;
+        }
+
+        .cart-item-actions-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+
+        .cart-action-links {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .cart-action-link {
+            background: none;
+            border: none;
+            color: #000042;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .cart-action-link:hover {
+            color: #d32f2f;
+        }
+
+        .cart-qty-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f4f5f8;
+            border-radius: 20px;
+            padding: 4px 12px;
+        }
+
+        .cart-qty-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            color: #000042;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-qty-val {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000042;
+            min-width: 16px;
+            text-align: center;
+        }
+
+        /* Wishlist/Login Banner Card */
+        .cart-banner-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 20px 24px;
+            border: 1px solid #eaebf0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .cart-banner-card:hover {
+            border-color: #000042;
+        }
+
+        .cart-banner-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000042;
+        }
+
+        .cart-arrow-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #d0d2dc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #000042;
+        }
+
+        /* Empty State */
+        .cart-empty-box {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 60px 30px;
+            text-align: center;
+            border: 1px solid #eaebf0;
+        }
+
+        .cart-empty-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+        }
+
+        .cart-empty-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #000042;
+        }
+
+        .cart-empty-subtitle {
+            color: #666688;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .cart-shop-btn {
+            display: inline-block;
+            background: #000042;
+            color: #ffffff;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            transition: background 0.2s;
+        }
+
+        .cart-shop-btn:hover {
+            background: #1f1f1f;
+        }
+
+        /* Right Column (Bill & Perks) */
+        .bill-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 22px;
+            border: 1px solid #eaebf0;
+            margin-bottom: 16px;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            color: #000042;
+            margin-bottom: 12px;
+        }
+
+        .bill-row-label {
+            color: #555577;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .bill-row-val {
+            font-weight: 700;
+        }
+
+        .bill-discount-val {
+            color: #00a065;
+            font-weight: 700;
+        }
+
+        .bill-total-row {
+            margin-top: 14px;
+            padding-top: 12px;
+            border-top: 1px dotted #d0d2dc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #000042;
+        }
+
+        /* Coupon Card */
+        .coupon-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 18px 20px;
+            border: 1px solid #eaebf0;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .coupon-badge-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #000042;
+            letter-spacing: 0.5px;
+        }
+
+        .coupon-savings {
+            font-size: 12px;
+            color: #666688;
+            margin-top: 2px;
+        }
+
+        .coupon-remove-btn {
+            background: none;
+            border: none;
+            color: #000042;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        /* Proceed Checkout Button */
+        .btn-checkout-lenskart {
+            width: 100%;
+            background: #000042;
+            color: #ffffff;
+            border: none;
+            padding: 18px;
+            border-radius: 35px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.1s;
+            box-shadow: 0 6px 20px rgba(0, 0, 66, 0.2);
+        }
+
+        .btn-checkout-lenskart:hover {
+            background: #000028;
+            transform: translateY(-1px);
+        }
+
+        /* Checkout Modal */
+        .checkout-modal-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .checkout-modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .checkout-modal-card {
+            background: #ffffff;
+            border-radius: 20px;
+            width: 520px;
+            max-width: 92vw;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .checkout-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .checkout-modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #000042;
+        }
+
+        .checkout-close-btn {
+            background: #f4f5f8;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .checkout-form-group {
+            margin-bottom: 16px;
+        }
+
+        .checkout-form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            color: #000042;
+            margin-bottom: 6px;
+        }
+
+        .checkout-form-input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d0d2dc;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .checkout-form-input:focus {
+            border-color: #000042;
+        }
+
+        .checkout-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .checkout-submit-btn {
+            width: 100%;
+            background: #000042;
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* Order Success Modal */
+        .success-box {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .success-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="cart-navbar">
+        <a href="index.html" class="cart-navbar-logo">
+            <img src="image/logo.png" alt="Vyapar Vault Logo">
+            <span>Vyapar Vault</span>
+        </a>
+        <div class="cart-navbar-right">
+            <div class="cart-badge-safe">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>100% safe</span>
+            </div>
+            <div class="cart-contact-phone">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <span>99998 99998</span>
+            </div>
+            <a href="admin.html" class="admin-link-btn">Admin Portal 🔐</a>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="cart-page-wrapper">
+        <!-- Left Side: Cart Items -->
+        <section class="cart-left-col">
+            <h1 class="cart-section-title" id="cart-header-title">Cart (0 Items)</h1>
+
+            <div id="cart-items-container">
+                <!-- Cart items dynamically rendered via JS -->
+            </div>
+
+            <!-- Login / Wishlist Card -->
+            <div class="cart-banner-card" onclick="window.location.href='my-account.html'">
+                <span class="cart-banner-text">Login to see items from your existing bag and wishlist</span>
+                <div class="cart-arrow-circle">→</div>
+            </div>
+        </section>
+
+        <!-- Right Side: Bill Details & Perks -->
+        <aside class="cart-right-col" id="cart-summary-aside">
+            <h2 class="cart-section-title">Bill Details</h2>
+
+            <!-- Bill Details Box -->
+            <div class="bill-card">
+                <div class="bill-row">
+                    <span class="bill-row-label">Total item price ▾</span>
+                    <span class="bill-row-val" id="bill-total-item-price">₹0</span>
+                </div>
+                <div class="bill-total-row">
+                    <span>Total payable</span>
+                    <span id="bill-total-payable">₹0</span>
+                </div>
+            </div>
+
+            <!-- Checkout Button -->
+            <button class="btn-checkout-lenskart" onclick="openCheckoutModal()">
+                <span>Proceed To Checkout</span>
+                <span>›</span>
+            </button>
+        </aside>
+    </main>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal-backdrop" id="checkout-modal-backdrop">
+        <div class="checkout-modal-card">
+            <div class="checkout-modal-header">
+                <h3>Customer Checkout & Address</h3>
+                <button class="checkout-close-btn" onclick="closeCheckoutModal()">&times;</button>
+            </div>
+
+            <form id="checkout-form" onsubmit="submitCustomerOrder(event)">
+                <div class="checkout-form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="cust-name" class="checkout-form-input" placeholder="e.g. Rajesh Kumar" required>
+                </div>
+
+                <div class="checkout-grid-2">
+                    <div class="checkout-form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="cust-phone" class="checkout-form-input" placeholder="e.g. 9876543210" required>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="cust-email" class="checkout-form-input" placeholder="e.g. rajesh@gmail.com">
+                    </div>
+                </div>
+
+                <div class="checkout-form-group">
+                    <label>Delivery Address *</label>
+                    <input type="text" id="cust-address" class="checkout-form-input" placeholder="House/Flat No., Building, Street Name" required>
+                </div>
+
+                <div class="checkout-grid-2">
+                    <div class="checkout-form-group">
+                        <label>City *</label>
+                        <input type="text" id="cust-city" class="checkout-form-input" placeholder="e.g. Delhi" required>
+                    </div>
+
+                    <div class="checkout-form-group">
+                        <label>Pincode *</label>
+                        <input type="text" id="cust-pincode" class="checkout-form-input" placeholder="e.g. 110001" required>
+                    </div>
+                </div>
+
+                <div class="checkout-form-group">
+                    <label>Payment Method</label>
+                    <select id="cust-payment" class="checkout-form-input">
+                        <option value="Cash On Delivery (COD)">Cash On Delivery (COD)</option>
+                        <option value="UPI / QR Code">UPI / QR Code</option>
+                        <option value="Credit / Debit Card">Credit / Debit Card</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="checkout-submit-btn" id="btn-submit-order">Place Order Now</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function getCart() {
+            try {
+                return JSON.parse(localStorage.getItem('vyapar_cart_items')) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem('vyapar_cart_items', JSON.stringify(cart));
+            renderCartPage();
+        }
+
+        function parsePriceNum(priceStr) {
+            if (!priceStr) return 0;
+            const cleaned = priceStr.toString().replace(/[^0-9.]/g, '');
+            return parseFloat(cleaned) || 0;
+        }
+
+        function updateItemQty(index, change) {
+            const cart = getCart();
+            if (cart[index]) {
+                cart[index].quantity += change;
+                if (cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+                saveCart(cart);
+            }
+        }
+
+        function removeItem(index) {
+            const cart = getCart();
+            if (cart[index]) {
+                cart.splice(index, 1);
+                saveCart(cart);
+            }
+        }
+
+        function openCheckoutModal() {
+            const cart = getCart();
+            if (cart.length === 0) {
+                alert('Your cart is empty! Please add products before checking out.');
+                return;
+            }
+            document.getElementById('checkout-modal-backdrop').classList.add('active');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal-backdrop').classList.remove('active');
+        }
+
+        async function submitCustomerOrder(event) {
+            event.preventDefault();
+
+            const cart = getCart();
+            if (cart.length === 0) return;
+
+            let itemPriceSum = 0;
+            cart.forEach(item => {
+                itemPriceSum += parsePriceNum(item.price) * item.quantity;
+            });
+            const totalPayable = itemPriceSum;
+
+            const customerDetails = {
+                name: document.getElementById('cust-name').value,
+                phone: document.getElementById('cust-phone').value,
+                email: document.getElementById('cust-email').value,
+                address: document.getElementById('cust-address').value,
+                city: document.getElementById('cust-city').value,
+                pincode: document.getElementById('cust-pincode').value
+            };
+
+            const paymentMethod = document.getElementById('cust-payment').value;
+
+            const btn = document.getElementById('btn-submit-order');
+            btn.disabled = true;
+            btn.textContent = 'Submitting Order...';
+
+            let newOrder = null;
+            if (typeof createVyaparOrder === 'function') {
+                newOrder = await createVyaparOrder(customerDetails, cart, totalPayable, paymentMethod);
+            } else {
+                newOrder = { id: 'VV-' + Math.floor(100000 + Math.random() * 900000) };
+            }
+
+            // Clear Cart
+            localStorage.setItem('vyapar_cart_items', JSON.stringify([]));
+
+            closeCheckoutModal();
+
+            // Show Confirmation
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = `
+                <div class="cart-empty-box">
+                    <div class="success-icon">🎉</div>
+                    <div class="cart-empty-title">Order Placed Successfully!</div>
+                    <div class="cart-empty-subtitle">Order ID: <strong>${newOrder.id}</strong></div>
+                    <p style="font-size: 14px; color: #555; margin-bottom: 20px;">
+                        Thank you <strong>${customerDetails.name}</strong>! Your order has been saved in Supabase in real-time.
+                    </p>
+                    <a href="index.html#shop-section" class="cart-shop-btn">Continue Shopping</a>
+                    <a href="admin.html" class="cart-shop-btn" style="background:#2563eb; margin-left: 10px;">View in Admin Portal</a>
+                </div>
+            `;
+            document.getElementById('cart-header-title').textContent = 'Order Confirmed!';
+        }
+
+        function renderCartPage() {
+            const cart = getCart();
+            const container = document.getElementById('cart-items-container');
+            const titleEl = document.getElementById('cart-header-title');
+
+            const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+            titleEl.textContent = `Cart (${totalQty} ${totalQty === 1 ? 'Item' : 'Items'})`;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="cart-empty-box">
+                        <div class="cart-empty-icon">🛒</div>
+                        <div class="cart-empty-title">Your Cart is Empty</div>
+                        <div class="cart-empty-subtitle">Explore our premium cleaning collection and add items to your cart!</div>
+                        <a href="index.html#shop-section" class="cart-shop-btn">Explore Products</a>
+                    </div>
+                `;
+
+                document.getElementById('bill-total-item-price').textContent = '₹0';
+                document.getElementById('bill-total-payable').textContent = '₹0';
+                return;
+            }
+
+            let itemPriceSum = 0;
+            let itemsHtml = '';
+
+            cart.forEach((item, index) => {
+                const unitPrice = parsePriceNum(item.price);
+                const itemTotal = unitPrice * item.quantity;
+                itemPriceSum += itemTotal;
+
+                const formattedUnitPrice = `₹${unitPrice.toLocaleString('en-IN')}`;
+                const formattedItemTotal = `₹${itemTotal.toLocaleString('en-IN')}`;
+
+                itemsHtml += `
+                    <article class="cart-item-card">
+                        <div class="cart-item-grid">
+                            <div class="cart-item-img-box">
+                                <img src="${item.image}" alt="${item.title}" onerror="this.src='image/logo.png'">
+                            </div>
+                            <div class="cart-item-details">
+                                <div class="cart-item-header-row">
+                                    <div class="cart-item-title">${item.title}</div>
+                                    <div class="cart-item-price-top">${formattedUnitPrice}</div>
+                                </div>
+                                <div class="dotted-divider"></div>
+                                <div class="cart-item-final-row">
+                                    <span class="cart-item-final-label">Final Price</span>
+                                    <span class="cart-item-final-val">${formattedItemTotal}</span>
+                                </div>
+                                <div class="dotted-divider"></div>
+                                <div class="cart-item-actions-row">
+                                    <div class="cart-action-links">
+                                        <button class="cart-action-link" onclick="removeItem(${index})">Remove</button>
+                                        <button class="cart-action-link" onclick="updateItemQty(${index}, 1)">Repeat</button>
+                                    </div>
+                                    <div class="cart-qty-selector">
+                                        <button class="cart-qty-btn" onclick="updateItemQty(${index}, -1)">-</button>
+                                        <span class="cart-qty-val">${item.quantity}</span>
+                                        <button class="cart-qty-btn" onclick="updateItemQty(${index}, 1)">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            });
+
+            container.innerHTML = itemsHtml;
+
+            const totalPayable = itemPriceSum;
+
+            document.getElementById('bill-total-item-price').textContent = `₹${itemPriceSum.toLocaleString('en-IN')}`;
+            document.getElementById('bill-total-payable').textContent = `₹${totalPayable.toLocaleString('en-IN')}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', renderCartPage);
+    </script>
+
+</body>
+</html>

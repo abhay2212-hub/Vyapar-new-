@@ -479,7 +479,7 @@ for p in products:
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>{p['price'].replace('₹','')}</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added {p['title']} to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, '{p['title']}', '{p['price']}', '{p['image']}'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>

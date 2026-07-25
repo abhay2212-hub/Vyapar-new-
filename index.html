@@ -1803,6 +1803,331 @@ a.button.razzi-button *,
     font-weight: 700 !important;
 }
 </style>
+
+<style id="custom-vyapar-cart-styles">
+/* Toast Notification Styling */
+#vyapar-toast-container {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+}
+.vyapar-toast-item {
+    pointer-events: auto;
+    background: #1f1f1f;
+    color: #ffffff;
+    padding: 14px 18px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 320px;
+    max-width: 420px;
+    animation: vyaparSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.vyapar-toast-item.fade-out {
+    opacity: 0;
+    transform: translateY(15px);
+}
+@keyframes vyaparSlideIn {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.vyapar-toast-icon {
+    width: 28px;
+    height: 28px;
+    background: #2e7d32;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.vyapar-toast-img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 8px;
+    padding: 4px;
+    flex-shrink: 0;
+}
+.vyapar-toast-details {
+    flex-grow: 1;
+    overflow: hidden;
+}
+.vyapar-toast-status {
+    font-size: 11px;
+    color: #81c784;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.vyapar-toast-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+.vyapar-toast-price {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffb400 !important;
+    margin-top: 1px;
+}
+.vyapar-toast-view-btn {
+    background: #ffffff;
+    color: #1f1f1f !important;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+.vyapar-toast-view-btn:hover {
+    background: #f0f0f0;
+}
+.vyapar-toast-close {
+    background: transparent;
+    border: none;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+}
+.vyapar-toast-close:hover {
+    color: #fff;
+}
+
+/* Slide-over Cart Drawer */
+#vyapar-cart-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(3px);
+    z-index: 999990;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+#vyapar-cart-backdrop.active {
+    opacity: 1;
+    visibility: visible;
+}
+#vyapar-cart-drawer {
+    position: fixed;
+    top: 0; right: -420px; bottom: 0;
+    width: 400px;
+    max-width: 90vw;
+    background: #ffffff;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+    z-index: 999995;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#vyapar-cart-drawer.active {
+    right: 0;
+}
+.vyapar-cart-header {
+    padding: 20px;
+    background: #1f1f1f;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.vyapar-cart-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff !important;
+}
+#vyapar-drawer-count-badge {
+    font-size: 14px;
+    color: #ffb400;
+    margin-left: 6px;
+}
+.vyapar-cart-close-btn {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 1;
+}
+.vyapar-cart-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+.vyapar-cart-empty {
+    text-align: center;
+    padding: 60px 20px;
+}
+.vyapar-empty-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+.vyapar-cart-empty h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+.vyapar-cart-empty p {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+.vyapar-shop-now-btn {
+    display: inline-block;
+    background: #1f1f1f;
+    color: #fff !important;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+}
+.vyapar-cart-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.vyapar-item-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 4px;
+}
+.vyapar-item-info {
+    flex-grow: 1;
+}
+.vyapar-item-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1f1f1f !important;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+.vyapar-item-price {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 6px;
+}
+.vyapar-item-qty-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.vyapar-qty-btn {
+    width: 24px;
+    height: 24px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.vyapar-qty-val {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 16px;
+    text-align: center;
+}
+.vyapar-remove-btn {
+    background: transparent;
+    border: none;
+    color: #d32f2f;
+    font-size: 11px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+.vyapar-item-total {
+    font-weight: 700;
+    font-size: 14px;
+    color: #1f1f1f;
+}
+.vyapar-cart-footer {
+    padding: 20px;
+    border-top: 1px solid #eee;
+    background: #f9f9f9;
+}
+.vyapar-cart-subtotal-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 700;
+    color: #1f1f1f;
+    margin-bottom: 10px;
+}
+.vyapar-subtotal-val {
+    color: #000;
+}
+.vyapar-shipping-notice {
+    font-size: 12px;
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.vyapar-cart-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.vyapar-checkout-btn {
+    width: 100%;
+    padding: 12px;
+    background: #1f1f1f;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.vyapar-checkout-btn:hover {
+    background: #333333;
+}
+.vyapar-clear-btn {
+    background: transparent;
+    border: none;
+    color: #777;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+</style>
+<script src="js/cart-drawer.js"></script>
+
 </head>
 
 <body class="home wp-singular page-template-default page page-id-1350 wp-embed-responsive wp-theme-razzi theme-razzi woocommerce-no-js ehf-template-razzi ehf-stylesheet-razzi full-content header-default header-v1 header-sticky woocommerce-active product-qty-number elementor-default elementor-kit-12 elementor-page elementor-page-1350">
@@ -1842,6 +2167,7 @@ a.button.razzi-button *,
 </li>
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12536"><a href="contact-us.html">Contact Us</a></li>
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-16042"><a href="my-account.html">My account</a></li>
+                                <li class="menu-item menu-item-type-post_type menu-item-object-page"><a href="admin.html" style="color: #2563eb !important; font-weight: 700;">Admin Portal 🔐</a></li>
                             </ul>
                         </nav>
                     </div>
@@ -2170,7 +2496,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Popular</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'urbanWipe Bathroom Cleaner 500ml', '₹1,500.00', 'image/shopping.webp'); return false;">
                     <img src="image/shopping.webp" alt="urbanWipe Bathroom Cleaner 500ml">
                 </a>
             </div>
@@ -2186,7 +2512,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,500.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added urbanWipe Bathroom Cleaner 500ml to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'urbanWipe Bathroom Cleaner 500ml', '₹1,500.00', 'image/shopping.webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2196,7 +2522,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Best Seller</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Everyday Ultra Clean Toilet Cleaner 1L', '₹200.00', 'image/ap/1.png'); return false;">
                     <img src="image/ap/1.png" alt="Everyday Ultra Clean Toilet Cleaner 1L">
                 </a>
             </div>
@@ -2212,7 +2538,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Everyday Ultra Clean Toilet Cleaner 1L to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Everyday Ultra Clean Toilet Cleaner 1L', '₹200.00', 'image/ap/1.png'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2222,7 +2548,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">10X Power</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Power Plus 10X Total Clean Toilet Cleaner', '₹200.00', 'image/ap/2.png'); return false;">
                     <img src="image/ap/2.png" alt="Harpic Power Plus 10X Total Clean Toilet Cleaner">
                 </a>
             </div>
@@ -2238,7 +2564,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Power Plus 10X Total Clean Toilet Cleaner to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Power Plus 10X Total Clean Toilet Cleaner', '₹200.00', 'image/ap/2.png'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2248,7 +2574,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Value Pack</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Presto! Disinfectant Bathroom Cleaner Lemon (Pack of 2)', '₹1,500.00', 'image/ap/3.png'); return false;">
                     <img src="image/ap/3.png" alt="Presto! Disinfectant Bathroom Cleaner Lemon (Pack of 2)">
                 </a>
             </div>
@@ -2264,7 +2590,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,500.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Presto! Disinfectant Bathroom Cleaner Lemon (Pack of 2) to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Presto! Disinfectant Bathroom Cleaner Lemon (Pack of 2)', '₹1,500.00', 'image/ap/3.png'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2274,7 +2600,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Organic Active</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Fresh Organic Active Citrus Toilet Cleaner', '₹500.00', 'image/ap/4.png'); return false;">
                     <img src="image/ap/4.png" alt="Harpic Fresh Organic Active Citrus Toilet Cleaner">
                 </a>
             </div>
@@ -2290,7 +2616,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>500.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Fresh Organic Active Citrus Toilet Cleaner to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Fresh Organic Active Citrus Toilet Cleaner', '₹500.00', 'image/ap/4.png'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2300,7 +2626,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">5 Litre Jumbo</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Presto! Disinfectant Toilet Cleaner 5L Can', '₹300.00', 'image/shopping (5).webp'); return false;">
                     <img src="image/shopping (5).webp" alt="Presto! Disinfectant Toilet Cleaner 5L Can">
                 </a>
             </div>
@@ -2316,7 +2642,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>300.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Presto! Disinfectant Toilet Cleaner 5L Can to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Presto! Disinfectant Toilet Cleaner 5L Can', '₹300.00', 'image/shopping (5).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2326,7 +2652,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Fresh Fragrance</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Hygienic Toilet Rim Block Lavender', '₹300.00', 'image/shopping (6).webp'); return false;">
                     <img src="image/shopping (6).webp" alt="Harpic Hygienic Toilet Rim Block Lavender">
                 </a>
             </div>
@@ -2342,7 +2668,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>300.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Hygienic Toilet Rim Block Lavender to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Hygienic Toilet Rim Block Lavender', '₹300.00', 'image/shopping (6).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2352,7 +2678,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Stain Block</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Godrej Spic Toilet Cleaner Shiny & Stain-Free', '₹300.00', 'image/shopping (7).webp'); return false;">
                     <img src="image/shopping (7).webp" alt="Godrej Spic Toilet Cleaner Shiny & Stain-Free">
                 </a>
             </div>
@@ -2368,7 +2694,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>300.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Godrej Spic Toilet Cleaner Shiny & Stain-Free to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Godrej Spic Toilet Cleaner Shiny & Stain-Free', '₹300.00', 'image/shopping (7).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2378,7 +2704,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Lemon Fresh</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Disinfectant Bathroom Cleaner Lemon', '₹1,500.00', 'image/shopping (8).webp'); return false;">
                     <img src="image/shopping (8).webp" alt="Harpic Disinfectant Bathroom Cleaner Lemon">
                 </a>
             </div>
@@ -2394,7 +2720,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,500.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Disinfectant Bathroom Cleaner Lemon to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Disinfectant Bathroom Cleaner Lemon', '₹1,500.00', 'image/shopping (8).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2404,7 +2730,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Tough Stain</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Bathroom Ultra 10X Tough Stain Remover', '₹200.00', 'image/shopping (9).webp'); return false;">
                     <img src="image/shopping (9).webp" alt="Harpic Bathroom Ultra 10X Tough Stain Remover">
                 </a>
             </div>
@@ -2420,7 +2746,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Bathroom Ultra 10X Tough Stain Remover to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Bathroom Ultra 10X Tough Stain Remover', '₹200.00', 'image/shopping (9).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2430,7 +2756,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Combo Pack</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Klenzmo Tile & Bathroom Cleaner + Tap Cleaner Combo', '₹1,500.00', 'image/shopping (10).webp'); return false;">
                     <img src="image/shopping (10).webp" alt="Klenzmo Tile & Bathroom Cleaner + Tap Cleaner Combo">
                 </a>
             </div>
@@ -2446,7 +2772,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,500.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Klenzmo Tile & Bathroom Cleaner + Tap Cleaner Combo to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Klenzmo Tile & Bathroom Cleaner + Tap Cleaner Combo', '₹1,500.00', 'image/shopping (10).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2456,7 +2782,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Germ Blaster</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Germ & Stain Blaster Toilet Cleaner Floral', '₹1,500.00', 'image/shopping (11).webp'); return false;">
                     <img src="image/shopping (11).webp" alt="Harpic Germ & Stain Blaster Toilet Cleaner Floral">
                 </a>
             </div>
@@ -2472,7 +2798,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,500.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Germ & Stain Blaster Toilet Cleaner Floral to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Germ & Stain Blaster Toilet Cleaner Floral', '₹1,500.00', 'image/shopping (11).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2482,7 +2808,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Expert Clean</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Domex Disinfectant Toilet Expert Cleaner', '₹1,000.00', 'image/ap/6.png'); return false;">
                     <img src="image/ap/6.png" alt="Domex Disinfectant Toilet Expert Cleaner">
                 </a>
             </div>
@@ -2498,7 +2824,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,000.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Domex Disinfectant Toilet Expert Cleaner to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Domex Disinfectant Toilet Expert Cleaner', '₹1,000.00', 'image/ap/6.png'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2508,7 +2834,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Sparkling Lemon</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Power Plus 10X Toilet Cleaner Sparkling Lemon', '₹200.00', 'image/ap/7.png'); return false;">
                     <img src="image/ap/7.png" alt="Harpic Power Plus 10X Toilet Cleaner Sparkling Lemon">
                 </a>
             </div>
@@ -2524,7 +2850,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Power Plus 10X Toilet Cleaner Sparkling Lemon to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Power Plus 10X Toilet Cleaner Sparkling Lemon', '₹200.00', 'image/ap/7.png'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2534,7 +2860,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Pine Forest</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Lizol Fresh & Clean Bathroom Cleaner Pine Forest', '₹1,000.00', 'image/shopping (14).webp'); return false;">
                     <img src="image/shopping (14).webp" alt="Lizol Fresh & Clean Bathroom Cleaner Pine Forest">
                 </a>
             </div>
@@ -2550,7 +2876,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,000.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Lizol Fresh & Clean Bathroom Cleaner Pine Forest to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Lizol Fresh & Clean Bathroom Cleaner Pine Forest', '₹1,000.00', 'image/shopping (14).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2560,7 +2886,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">12hr Fragrance</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Lizol Fresh & Clean Bathroom Cleaner Floral', '₹800.00', 'image/shopping (15).webp'); return false;">
                     <img src="image/shopping (15).webp" alt="Lizol Fresh & Clean Bathroom Cleaner Floral">
                 </a>
             </div>
@@ -2576,7 +2902,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>800.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Lizol Fresh & Clean Bathroom Cleaner Floral to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Lizol Fresh & Clean Bathroom Cleaner Floral', '₹800.00', 'image/shopping (15).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2586,7 +2912,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">White & Shine</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic White & Shine Bleach Toilet Cleaner', '₹200.00', 'image/shopping (16).webp'); return false;">
                     <img src="image/shopping (16).webp" alt="Harpic White & Shine Bleach Toilet Cleaner">
                 </a>
             </div>
@@ -2602,7 +2928,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic White & Shine Bleach Toilet Cleaner to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic White & Shine Bleach Toilet Cleaner', '₹200.00', 'image/shopping (16).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2612,7 +2938,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">1 Litre</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Lizol Bathroom Cleaner Pine Forest 1L', '₹200.00', 'image/shopping (17).webp'); return false;">
                     <img src="image/shopping (17).webp" alt="Lizol Bathroom Cleaner Pine Forest 1L">
                 </a>
             </div>
@@ -2628,7 +2954,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Lizol Bathroom Cleaner Pine Forest 1L to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Lizol Bathroom Cleaner Pine Forest 1L', '₹200.00', 'image/shopping (17).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2638,7 +2964,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Eco Industrial</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Born Good Industrial Grade Toilet Bowl Cleaner 5L', '₹200.00', 'image/shopping (18).webp'); return false;">
                     <img src="image/shopping (18).webp" alt="Born Good Industrial Grade Toilet Bowl Cleaner 5L">
                 </a>
             </div>
@@ -2654,7 +2980,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Born Good Industrial Grade Toilet Bowl Cleaner 5L to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Born Good Industrial Grade Toilet Bowl Cleaner 5L', '₹200.00', 'image/shopping (18).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2664,7 +2990,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Spray & Wipe</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Vooki Bathroom Spray & Toilet Bowl Cleaner Combo', '₹300.00', 'image/shopping (19).webp'); return false;">
                     <img src="image/shopping (19).webp" alt="Vooki Bathroom Spray & Toilet Bowl Cleaner Combo">
                 </a>
             </div>
@@ -2680,7 +3006,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>300.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Vooki Bathroom Spray & Toilet Bowl Cleaner Combo to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Vooki Bathroom Spray & Toilet Bowl Cleaner Combo', '₹300.00', 'image/shopping (19).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2690,7 +3016,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Triple Pack</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Vooki Toilet Bowl & Bathroom Surface Cleaner Pack', '₹300.00', 'image/shopping (20).webp'); return false;">
                     <img src="image/shopping (20).webp" alt="Vooki Toilet Bowl & Bathroom Surface Cleaner Pack">
                 </a>
             </div>
@@ -2706,7 +3032,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>300.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Vooki Toilet Bowl & Bathroom Surface Cleaner Pack to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Vooki Toilet Bowl & Bathroom Surface Cleaner Pack', '₹300.00', 'image/shopping (20).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2716,7 +3042,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Eco Friendly</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Ecover Triple Action Eco Toilet Cleaner Pine Fresh', '₹1,000.00', 'image/shopping (21).webp'); return false;">
                     <img src="image/shopping (21).webp" alt="Ecover Triple Action Eco Toilet Cleaner Pine Fresh">
                 </a>
             </div>
@@ -2732,7 +3058,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,000.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Ecover Triple Action Eco Toilet Cleaner Pine Fresh to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Ecover Triple Action Eco Toilet Cleaner Pine Fresh', '₹1,000.00', 'image/shopping (21).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2742,7 +3068,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">100 Flush Guard</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Vooki Stain Resistant Toilet Bowl Cleaner (Pack of 2)', '₹1,000.00', 'image/shopping (22).webp'); return false;">
                     <img src="image/shopping (22).webp" alt="Vooki Stain Resistant Toilet Bowl Cleaner (Pack of 2)">
                 </a>
             </div>
@@ -2758,7 +3084,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,000.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Vooki Stain Resistant Toilet Bowl Cleaner (Pack of 2) to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Vooki Stain Resistant Toilet Bowl Cleaner (Pack of 2)', '₹1,000.00', 'image/shopping (22).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2768,7 +3094,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Ceramic Shine</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('bathroom', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'DOT Extra Power Ceramic & Toilet Cleaner', '₹200.00', 'image/shopping (23).webp'); return false;">
                     <img src="image/shopping (23).webp" alt="DOT Extra Power Ceramic & Toilet Cleaner">
                 </a>
             </div>
@@ -2784,7 +3110,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>200.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added DOT Extra Power Ceramic & Toilet Cleaner to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'DOT Extra Power Ceramic & Toilet Cleaner', '₹200.00', 'image/shopping (23).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
@@ -2794,7 +3120,7 @@ a.button.razzi-button *,
         <div class="premium-woo-product-wrapper">
             <div class="cleaner-img-box">
                 <span class="cleaner-badge">Max 10 Action</span>
-                <a href="#shop-section" onclick="filterCleanerProducts('toilet', event)">
+                <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Power Plus Max 10 Actions Toilet Cleaner', '₹1,000.00', 'image/shopping (24).webp'); return false;">
                     <img src="image/shopping (24).webp" alt="Harpic Power Plus Max 10 Actions Toilet Cleaner">
                 </a>
             </div>
@@ -2810,7 +3136,7 @@ a.button.razzi-button *,
                     <span class="woocommerce-Price-amount amount"><bdi><span class="woocommerce-Price-currencySymbol">₹</span>1,000.00</bdi></span>
                 </span>
                 <div style="margin-top: 12px;">
-                    <a href="#shop-section" onclick="alert('Added Harpic Power Plus Max 10 Actions Toilet Cleaner to cart!'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
+                    <a href="#shop-section" onclick="addToVyaparCart(event, 'Harpic Power Plus Max 10 Actions Toilet Cleaner', '₹1,000.00', 'image/shopping (24).webp'); return false;" class="button razzi-button" style="padding: 8px 20px; font-size: 13px; border-radius: 4px; background: #1f1f1f; color: #fff; text-decoration: none; display: inline-block;">Add to Cart</a>
                 </div>
             </div>
         </div>
