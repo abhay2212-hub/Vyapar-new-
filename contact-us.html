@@ -2128,6 +2128,97 @@ a.button.razzi-button *,
 </style>
 <script src="js/cart-drawer.js"></script>
 
+
+<script id="vyapar-search-script">
+function handleVyaparSearch(event) {
+    if (event) event.preventDefault();
+    
+    var form = (event && event.target) ? event.target : document.querySelector('#search-modal form');
+    var catSelect = form ? form.querySelector('select[name="product_cat"]') : null;
+    var searchInput = form ? form.querySelector('input.search-field') : null;
+    
+    var catValue = catSelect ? catSelect.value : '0';
+    var queryValue = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    
+    // If not on index.html, redirect with parameters
+    var isIndex = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname === '';
+    if (!isIndex) {
+        sessionStorage.setItem('vyapar_search_query', queryValue);
+        sessionStorage.setItem('vyapar_search_cat', catValue);
+        window.location.href = 'index.html#shop-section';
+        return false;
+    }
+    
+    // Close modal if submit event triggered
+    if (event) {
+        var modal = document.getElementById('search-modal');
+        if (modal) {
+            modal.classList.remove('open');
+            modal.style.display = 'none';
+            document.body.classList.remove('search-modal-opened');
+            var backdrop = document.querySelector('.rz-modal-backdrop, .off-modal-layer');
+            if (backdrop) backdrop.click();
+        }
+    }
+    
+    // Live filter items on index.html
+    var items = document.querySelectorAll('.cleaner-product-item');
+    items.forEach(function(item) {
+        var itemCat = item.getAttribute('data-category') || '';
+        var textContent = item.innerText.toLowerCase();
+        
+        var catMatches = (catValue === '0' || catValue === 'all' || itemCat === catValue);
+        var queryMatches = (!queryValue || textContent.includes(queryValue));
+        
+        if (catMatches && queryMatches) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    // Update filter tabs UI
+    var buttons = document.querySelectorAll('.cleaner-filter-btn');
+    buttons.forEach(function(btn) {
+        btn.classList.remove('active');
+        if (catValue !== '0' && btn.getAttribute('data-filter') === catValue) {
+            btn.classList.add('active');
+        } else if (catValue === '0' && !queryValue && btn.getAttribute('data-filter') === 'all') {
+            btn.classList.add('active');
+        }
+    });
+
+    if (event) {
+        var shopSec = document.getElementById('shop-section');
+        if (shopSec) {
+            shopSec.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+    
+    return false;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var query = sessionStorage.getItem('vyapar_search_query');
+    var cat = sessionStorage.getItem('vyapar_search_cat');
+    if (query !== null || cat !== null) {
+        sessionStorage.removeItem('vyapar_search_query');
+        sessionStorage.removeItem('vyapar_search_cat');
+        setTimeout(function() {
+            var catSelect = document.querySelector('#search-modal select[name="product_cat"]');
+            var searchInput = document.querySelector('#search-modal input.search-field');
+            if (catSelect && cat) catSelect.value = cat;
+            if (searchInput && query) searchInput.value = query;
+            handleVyaparSearch(null);
+            var shopSec = document.getElementById('shop-section');
+            if (shopSec) {
+                shopSec.scrollIntoView({ behavior: 'smooth' });
+            }
+        }, 250);
+    }
+});
+</script>
+
 </head>
 
 <body class="home wp-singular page-template-default page page-id-1350 wp-embed-responsive wp-theme-razzi theme-razzi woocommerce-no-js ehf-template-razzi ehf-stylesheet-razzi full-content header-default header-v1 header-sticky woocommerce-active product-qty-number elementor-default elementor-kit-12 elementor-page elementor-page-1350">
@@ -2159,10 +2250,14 @@ a.button.razzi-button *,
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12535"><a href="about-us.html">About Us</a></li>
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-13801">
     <a href="shop.html">Shop <span style="font-size: 10px; margin-left: 3px;">▼</span></a>
-    <ul class="sub-menu">
-        <li class="menu-item"><a href="shop.html">All Products</a></li>
-        <li class="menu-item"><a href="shop.html#shop-section">Bathroom Cleaner</a></li>
-        <li class="menu-item"><a href="shop.html#shop-section">Toilet Cleaner</a></li>
+        <ul class="sub-menu">
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('all', event);}else{sessionStorage.setItem('vyapar_cat', 'all');}">All Products</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('kitchen', event);}else{sessionStorage.setItem('vyapar_cat', 'kitchen');}">Kitchen Cleaner</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('dishwashing', event);}else{sessionStorage.setItem('vyapar_cat', 'dishwashing');}">Dishwashing</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('laundry', event);}else{sessionStorage.setItem('vyapar_cat', 'laundry');}">Laundry</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('toilet', event);}else{sessionStorage.setItem('vyapar_cat', 'toilet');}">Toilet Cleaner</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('floor', event);}else{sessionStorage.setItem('vyapar_cat', 'floor');}">Floor Cleaner</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('stain', event);}else{sessionStorage.setItem('vyapar_cat', 'stain');}">Stain Remover</a></li>
     </ul>
 </li>
                                 <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12536 active current-menu-item"><a href="contact-us.html">Contact Us</a></li>
@@ -2395,10 +2490,14 @@ a.button.razzi-button *,
                         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12535"><a href="about-us.html">About Us</a></li>
                         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-13801">
     <a href="shop.html">Shop <span style="font-size: 10px; margin-left: 3px;">▼</span></a>
-    <ul class="sub-menu">
-        <li class="menu-item"><a href="shop.html">All Products</a></li>
-        <li class="menu-item"><a href="shop.html#shop-section">Bathroom Cleaner</a></li>
-        <li class="menu-item"><a href="shop.html#shop-section">Toilet Cleaner</a></li>
+        <ul class="sub-menu">
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('all', event);}else{sessionStorage.setItem('vyapar_cat', 'all');}">All Products</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('kitchen', event);}else{sessionStorage.setItem('vyapar_cat', 'kitchen');}">Kitchen Cleaner</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('dishwashing', event);}else{sessionStorage.setItem('vyapar_cat', 'dishwashing');}">Dishwashing</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('laundry', event);}else{sessionStorage.setItem('vyapar_cat', 'laundry');}">Laundry</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('toilet', event);}else{sessionStorage.setItem('vyapar_cat', 'toilet');}">Toilet Cleaner</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('floor', event);}else{sessionStorage.setItem('vyapar_cat', 'floor');}">Floor Cleaner</a></li>
+        <li class="menu-item"><a href="index.html#shop-section" onclick="if(window.filterCleanerProducts){filterCleanerProducts('stain', event);}else{sessionStorage.setItem('vyapar_cat', 'stain');}">Stain Remover</a></li>
     </ul>
 </li>
                         <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-12536 active current-menu-item"><a href="contact-us.html">Contact Us</a></li>
@@ -3420,31 +3519,33 @@ a.button.razzi-button *,
     </div>
 
 
-    <div id="search-modal" class="search-modal rz-modal ra-search-form ra-search-modal" tabindex="-1" role="dialog">
+        <div id="search-modal" class="search-modal rz-modal ra-search-form ra-search-modal" tabindex="-1" role="dialog">
         <div class="off-modal-layer"></div>
         <div class="search-panel-content panel-content">
             <div class="modal-header">
-                <h3 class="modal-title">
-                    Search Products </h3>
+                <h3 class="modal-title">Search Products</h3>
                 <a href="#" class="close-search-panel button-close"><span class="razzi-svg-icon "><svg aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></a>
             </div>
             <div class="modal-content">
-                <form method="get" class="form-search" action="https://vasroventures.com/">
+                <form method="get" class="form-search" action="#shop-section" onsubmit="return handleVyaparSearch(event);">
                     <div class="search-inner-content">
                         <div class="product-cat">
                             <div class="product-cat-label"><span class="label">All Categories</span><span class="razzi-svg-icon "><svg aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></div>
-                            <select
-                                name='product_cat' id='product-cat-modal' class='product-cat-dd'>
+                            <select name='product_cat' id='product-cat-modal' class='product-cat-dd' onchange="var lbl = this.previousElementSibling.querySelector('.label'); if(lbl) lbl.innerText = this.options[this.selectedIndex].text;">
                                 <option value='0' selected='selected'>All Categories</option>
-                                <option class="level-0" value="bathroom">Bathroom Cleaner</option>
+                                <option class="level-0" value="kitchen">Kitchen Cleaner</option>
+                                <option class="level-0" value="dishwashing">Dishwashing</option>
+                                <option class="level-0" value="laundry">Laundry</option>
                                 <option class="level-0" value="toilet">Toilet Cleaner</option>
-                                </select>
+                                <option class="level-0" value="floor">Floor Cleaner</option>
+                                <option class="level-0" value="stain">Stain Remover</option>
+                            </select>
                         </div>
                         <div class="search-wrapper">
-                            <input type="text" name="s" class="search-field" autocomplete="off" placeholder="Search for items">
+                            <input type="text" name="s" class="search-field" autocomplete="off" placeholder="Search for items" oninput="if(window.location.pathname.endsWith('index.html')||window.location.pathname==='/'||window.location.pathname===''){ handleVyaparSearch(null); }">
                             <input type="hidden" name="post_type" value="product">
                             <a href="#" class="close-search-results"><span class="razzi-svg-icon "><svg aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></span></a>
-                            <button class="search-submit" type="submit"><span class="razzi-svg-icon "><svg aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span></button>
+                            <button class="search-submit" type="submit" style="background: #1f1f1f; color: #fff; border-radius: 4px; border: none; padding: 0 12px; cursor: pointer;"><span class="razzi-svg-icon "><svg aria-hidden="true" role="img" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span></button>
                         </div>
                     </div>
                     <span class="razzi-loading"></span>
@@ -3452,6 +3553,7 @@ a.button.razzi-button *,
                 <div class="search-results woocommerce"></div>
             </div>
         </div>
+    </div>
     </div>
     <div id="quick-view-modal" class="quick-view-modal rz-modal single-product">
         <div class="off-modal-layer"></div>
