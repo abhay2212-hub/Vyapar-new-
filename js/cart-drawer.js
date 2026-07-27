@@ -28,23 +28,24 @@
         });
     }
 
-    window.addToVyaparCart = function(event, title, price, image) {
+    window.addToVyaparCart = function(event, title, price, image, quantity = 1) {
         if (event) {
             event.preventDefault();
             event.stopPropagation();
         }
 
+        const qty = parseInt(quantity) || 1;
         const cart = getCart();
         const existingIndex = cart.findIndex(item => item.title === title);
 
         if (existingIndex > -1) {
-            cart[existingIndex].quantity += 1;
+            cart[existingIndex].quantity += qty;
         } else {
             cart.push({
                 title: title,
                 price: price,
                 image: image,
-                quantity: 1
+                quantity: qty
             });
         }
 
