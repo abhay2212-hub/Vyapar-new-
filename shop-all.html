@@ -419,6 +419,10 @@
                 <button class="filter-btn active" onclick="filterProducts('all', this)">All Products</button>
                 <button class="filter-btn" onclick="filterProducts('toilet', this)">Toilet Cleaners</button>
                 <button class="filter-btn" onclick="filterProducts('bathroom', this)">Bathroom Cleaners</button>
+                <button class="filter-btn" onclick="filterProducts('kitchen', this)">Kitchen Cleaners</button>
+                <button class="filter-btn" onclick="filterProducts('floor', this)">Floor Cleaners</button>
+                <button class="filter-btn" onclick="filterProducts('laundry', this)">Laundry</button>
+                <button class="filter-btn" onclick="filterProducts('stain', this)">Stain Removers</button>
                 <button class="filter-btn" onclick="filterProducts('combo', this)">Combos & Packs</button>
             </div>
             <div class="search-box">
@@ -457,15 +461,8 @@
         let searchQuery = '';
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Load only products from image/123/ folder or custom list
-            allNewProducts = Object.values(window.VYAPAR_PRODUCTS).filter(p => {
-                return p.images && p.images[0] && p.images[0].includes('image/123/');
-            });
-
-            // If no 123 products found fallback to all
-            if (allNewProducts.length === 0) {
-                allNewProducts = Object.values(window.VYAPAR_PRODUCTS);
-            }
+            // Load all products from VYAPAR_PRODUCTS catalog
+            allNewProducts = Object.values(window.VYAPAR_PRODUCTS);
 
             renderGrid();
         });
@@ -481,8 +478,16 @@
                     matchesCategory = p.categorySlug === 'toilet';
                 } else if (currentFilter === 'bathroom') {
                     matchesCategory = p.categorySlug === 'bathroom';
+                } else if (currentFilter === 'kitchen') {
+                    matchesCategory = p.categorySlug === 'kitchen';
+                } else if (currentFilter === 'floor') {
+                    matchesCategory = p.categorySlug === 'floor';
+                } else if (currentFilter === 'laundry') {
+                    matchesCategory = p.categorySlug === 'laundry';
+                } else if (currentFilter === 'stain') {
+                    matchesCategory = p.categorySlug === 'stain';
                 } else if (currentFilter === 'combo') {
-                    matchesCategory = (p.badge === 'COMBO') || (p.title.toLowerCase().includes('combo') || p.title.toLowerCase().includes('pack'));
+                    matchesCategory = (p.badge === 'COMBO') || (p.categorySlug === 'combo') || (p.title.toLowerCase().includes('combo') || p.title.toLowerCase().includes('pack'));
                 }
 
                 // Search Filter
